@@ -1,0 +1,27 @@
+#cssmenu,
+#cssmenu ul,
+#cssmenu ul li,
+#cssmenu ul li a {
+  margin: 0px 0px 0px -1px;
+  padding: 0px 0px 0px 0px; /*Haut  droit bas gauche*/
+  list-style: none;
+  display: block;
+  position: relative;
+  line-height: 0;
+}
+
+#cssmenu {
+  width: auto;
+  background: #000000;
+}
+
+#cssmenu ul li {
+  display: inline-block;
+}
+
+#cssmenu.align-right ul li {
+  float: right;
+}
+#cssmenu ul li a {
+  text-decoration: none;
+}
