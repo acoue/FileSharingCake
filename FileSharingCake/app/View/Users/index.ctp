@@ -1,5 +1,10 @@
 <p><h3>Liste des utilisateurs</h3></p>
 <?php 
+
+// echo "<p align='center'>";
+// echo $this->html->link(	"Check user",	array("controller" => "users", "action" => "check"));
+// echo "</p>";
+
 echo "<p align='center'>";
 echo $this->html->link(
 		$this->Html->image('ajouter.png'),

@@ -28,7 +28,7 @@
 </table>
 <p align='center'>
 <?= $this->html->link(
-		$this->Html->image('retour.png',array('width' =>'40px')),
+		$this->Html->image('retour.png'),
 		array("controller" => "users", "action" => "index"),
 					array('escape' => false) 
 			);?>

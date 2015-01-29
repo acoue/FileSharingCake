@@ -1,6 +1,11 @@
 <?php
+// App::uses('Folder', 'Utility');
+// App::uses('File', 'Utility');
+// App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
+
 class UsersController extends AppController {
 
+	
 	
     public function beforeFilter() {
     	parent::beforeFilter();
@@ -8,6 +13,37 @@ class UsersController extends AppController {
     	$this->Auth->allow('logout');
     }
 	
+//     public function check(){
+//     	$dir = new Folder('User', true);
+//     	$files = $dir->find('.*');
+//     	$passwordHasher = new SimplePasswordHasher();
+//     	$contents = "";
+// 	    foreach ($files as $file) {
+// 		    //$file = new File($dir->pwd() . DS . $file);
+// 	    	$contents .= "INSERT INTO users(username,nom,prenom,password,role) values('".$file."','";
+// 		    /*Ouverture du fichier en lecture seule*/
+// 		    $handle = fopen($dir->pwd() . DS . $file, 'r');
+// 		    /*Si on a réussi à ouvrir le fichier*/
+// 		    if ($handle) {
+// 		    	/*Tant que l'on est pas à la fin du fichier*/
+// 		    	$i = 0;
+// 		    	while (!feof($handle)) {
+// 		    		$i++;
+// 		    		/*On lit la ligne courante*/
+// 		    		$buffer = fgets($handle);
+// 		    		if($i == 4) $contents .= $passwordHasher->hash($buffer);
+// 		    		else $contents .= $buffer."','";
+// 		    	}
+// 		    	/*On ferme le fichier*/
+// 		    	fclose($handle);
+// 		    }
+// 		    $contents .= "');";
+// 		}
+		
+//     	debug($contents);
+//     	die();
+//     }
+    
  	public function index() {
         $this->User->recursive = -1;
         $this->set('users', $this->paginate());

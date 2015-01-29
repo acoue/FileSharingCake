@@ -18,13 +18,13 @@
 <? 
 if(isset($this->request->data['User']['id'])) {
 	echo $this->html->link(
-		$this->Html->image('retour.png',array('width' =>'40px')),
+		$this->Html->image('retour.png'),
 		array("controller" => "users", "action" => "edit/".$this->request->data['User']['id']),
 		array('escape' => false)
 		);
 } else {
 	echo $this->html->link(
-		$this->Html->image('retour.png',array('width' =>'40px')),
+		$this->Html->image('retour.png'),
 		array("controller" => "users", "action" => "index"),
 		array('escape' => false)
 		);
