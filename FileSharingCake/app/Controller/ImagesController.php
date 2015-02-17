@@ -48,8 +48,10 @@ class ImagesController extends AppController {
 // 		die();
 		$filename = strtolower($this->request->data['Image']['image_file']['name']);
 		$extension = strtolower(pathinfo($filename , PATHINFO_EXTENSION));
-
-		if(!empty($this->request->data['Image']['image_file']['tmp_name']) && in_array($extension,array('png','jpeg','jpg'))){
+		
+		if ($this->request->data['Image']['image_file']['size'] > 5242880 ) {
+			$this->Session->setFlash("Le fichier d&eacute;passe la limite autoris&eacute;e.", "message", array('type'=>'erreur'));
+		} else if(!empty($this->request->data['Image']['image_file']['tmp_name']) && in_array($extension,array('png','jpeg','jpg'))){
 			$now = date("YmdHis");
 			$nomFichier = $now.".".$extension;
 			$destination = IMAGES.'data'.DS.$nomFichier;
@@ -114,10 +116,10 @@ class ImagesController extends AppController {
 		//recuperation de toutes les images
 		$this->Image->recursive = -1;
 		$files = $this->Image->find('all', array('fields' => array('Image.name')));
-		
+
 		//debug($files);
 		//die();
-		
+
 		$zip = new ZipArchive();
 		//Creation du fichier zip
 		if(($zip->open($dir.'photo.zip', ZIPARCHIVE::OVERWRITE))===TRUE){

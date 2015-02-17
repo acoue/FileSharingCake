@@ -18,7 +18,7 @@
 					<?php
 						if(!empty($_SESSION['Auth']['User'])) echo $this->element('menu'); 	
 						//echo $this->Session->flash('auth');
-						echo $this->session->flash();
+						echo $this->Session->flash();
 						
 						echo "<br />".$this->fetch('content'); 
 					?>

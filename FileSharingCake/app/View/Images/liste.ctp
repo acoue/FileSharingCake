@@ -18,7 +18,8 @@ function checkAll(name, checked){
 		<td><span class='vertAlign'><h3>AJOUT D'UN FICHIER</h3></span></td>
 	</tr>
 </table>
-<? 	echo $this->Form->create('Image', array('type' => 'file', 'controller'=>'Images', 'action' =>'add'));
+<? 	//http://grafikart.github.io/CakePHP-Media/
+	echo $this->Form->create('Image', array('type' => 'file', 'controller'=>'Images', 'action' =>'add'));
 	echo $this->Form->input('image_file', array('label' => 'Image à insérer : ', 'type' => 'file', 'size' => '100px'));
 	echo $this->Form->end(__('Envoyer'),array('align' => 'center')); 
 ?>

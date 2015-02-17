@@ -6,7 +6,7 @@
 // echo "</p>";
 
 echo "<p align='center'>";
-echo $this->html->link(
+echo $this->Html->link(
 		$this->Html->image('ajouter.png'),
 		array("controller" => "users", "action" => "add"),
 		array('escape' => false)
@@ -37,7 +37,7 @@ foreach ($users as $user) {
 	   	echo "</td>";
 	   	echo "<td align='center' width='70%'><b>".$user['User']['prenom']." ".$user['User']['nom']."</b></td>";
 	   	echo "<td align='center' width='10%'>";
-	   	echo $this->html->link(
+	   	echo $this->Html->link(
 					$this->Html->image('password.png'),
 					array("controller" => "users", "action" => "password/".$user['User']['id']),
 					array('escape' => false)
@@ -46,4 +46,6 @@ foreach ($users as $user) {
 	   	echo "</tr>";
 	}
 ?>
-</table>
+</table></br>
+
+<? if(!empty($this->Paginator->numbers())) echo "Page(s) : ".$this->Paginator->numbers(); ?>

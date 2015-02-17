@@ -4,7 +4,7 @@
             Contenue de la Session
         </caption>
         <thead>
-            <tr><th>$session->read();</th></tr>
+            <tr><th>$Session->read();</th></tr>
         </thead>
     <tbody>
         <tbody>
