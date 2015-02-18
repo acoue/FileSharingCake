@@ -3,7 +3,7 @@
 class ImagesController extends AppController {
 
 	public $components = array('Paginator');
-
+	
 	public $paginate = array(
 			'limit' => 12,
 			'order' => array(
@@ -37,6 +37,7 @@ class ImagesController extends AppController {
 		}
 
 		// similaire à un findAll(), mais récupère les résultats paginés
+		$this->Image->recursive = 1;
 		$images = $this->Paginator->paginate('Image');
 		$this->set(array('images'=>$images,'total' => $total));
 		$this->render('liste');
@@ -44,12 +45,46 @@ class ImagesController extends AppController {
 	}
 
 	public function add() {
-// 		debug($this->request->data);
-// 		die();
-		$filename = strtolower($this->request->data['Image']['image_file']['name']);
-		$extension = strtolower(pathinfo($filename , PATHINFO_EXTENSION));
-		
-		if ($this->request->data['Image']['image_file']['size'] > 5242880 ) {
+		$listeFile = $this->request->data['Image']['files'];
+		$multiOk=true;
+		$message="";
+		//debug($listeFile);
+		//die();
+ 		foreach ($listeFile as $fichier) {
+ 			$filename = strtolower($fichier['name']);
+ 			$extension = strtolower(pathinfo($filename , PATHINFO_EXTENSION));
+ 			//break;
+ 			if ($fichier['size'] > 5242880 ) {
+ 				$message .= "Le fichier ".$fichier['name']."d&eacute;passe la limite autoris&eacute;e. ";
+ 				$multiOk = false;
+ 			} else if (! in_array($extension,array('png','jpeg','jpg'))) {
+ 				$message .= "Vous ne pouvez uploader que des fichiers de type PNG JPG ou JPEG. ";
+ 				$multiOk = false;
+			} 			
+ 		}
+ 		
+ 		if($multiOk) {
+ 			$message = "";
+ 			foreach ($listeFile as $fichier) {
+ 				//Insertion 
+ 				$now = date("YmdHis");
+ 				$nomFichier = $now."-".mt_rand(1,300).".".$extension;
+ 				$destination = IMAGES.'data'.DS.$nomFichier;
+ 				move_uploaded_file($fichier['tmp_name'], $destination);
+ 				
+ 				$this->Image->create();
+ 				if ($this->Image->save(array('name' => $nomFichier, 'user_id' => $_SESSION['Auth']['User']['id']))) {
+ 					$message .= "Upload du fichier ".$filename." réussi. ";
+ 				} else {
+ 					$message .="Echec de l\'upload du fichier ".$filename." ";
+ 				}
+ 				$this->Session->setFlash($message, "message", array('type'=>'info'));
+ 			}
+ 		} else {
+ 			$this->Session->setFlash($message, "message", array('type'=>'erreur'));
+ 		}
+ 		
+		/* if ($this->request->data['Image']['image_file']['size'] > 5242880 ) {
 			$this->Session->setFlash("Le fichier d&eacute;passe la limite autoris&eacute;e.", "message", array('type'=>'erreur'));
 		} else if(!empty($this->request->data['Image']['image_file']['tmp_name']) && in_array($extension,array('png','jpeg','jpg'))){
 			$now = date("YmdHis");
@@ -66,7 +101,30 @@ class ImagesController extends AppController {
 		} else if (!empty($this->request->data['Image']['image_file']['tmp_name'])){
  			$this->Session->setFlash("Vous ne pouvez uploader que des fichiers de type PNG JPG ou JPEG", "message", array('type'=>'erreur'));
 		}
-
+ */
+		//Tag
+		//debug($this->data);
+		//die();
+		/* if(!empty($this->request->data['Image']['tags'])) {
+			$tags = explode(',', $this->request->data['Image']['tags']);
+			foreach ($tags as $tag):
+			$tag = trim($tag);
+			if(!empty($tag)) {
+				$this->loadModel('Tag');
+				$data = $this->Tag->findByName($tag);
+				if(!empty($d)) {
+					$this->Tag->id = $data['Tag']['id'];
+				} else {
+					$this->Tag->create();
+					$this->Tag->save(array('name'=>$tag));
+				}
+				$this->loadModel('ImagesTag');
+				$this->ImagesTag->create();
+				$this->ImagesTag->save(array('image_id'=>$this->id,'tag_id'=>$this->Tag->id));
+			}
+			endforeach;
+		} */
+		
 		$this->set('title_for_layout', 'FileSharing - Gestion des images');
 		return $this->redirect(array('controller' => 'Images', 'action' => 'liste'));
 	}
@@ -136,5 +194,13 @@ class ImagesController extends AppController {
 		$this->set('title_for_layout', 'FileSharing - Téléchargement des images');
 		$this->set(array('zipOb'=>$zipOb));
 		$this->render('download');
+	}
+	
+	public function deleteTag($id) {
+		$this->Image->ImagesTag->delete($id);
+		$this->Session->setFlash('Tag supprimé', "message", array('type'=>'info'));
+		$this->set('title_for_layout', 'FileSharing - Gestion des images');
+		return $this->redirect(array('controller' => 'Images', 'action' => 'liste'));
+	
 	}
 }

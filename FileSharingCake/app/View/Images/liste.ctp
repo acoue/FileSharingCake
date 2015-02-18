@@ -19,8 +19,13 @@ function checkAll(name, checked){
 	</tr>
 </table>
 <? 	//http://grafikart.github.io/CakePHP-Media/
-	echo $this->Form->create('Image', array('type' => 'file', 'controller'=>'Images', 'action' =>'add'));
-	echo $this->Form->input('image_file', array('label' => 'Image à insérer : ', 'type' => 'file', 'size' => '100px'));
+	//echo $this->Form->create('Image', array('type' => 'file', 'multiple'=>'multiple','controller'=>'Images', 'action' =>'add'));
+
+	echo $this->Form->create('Image', array('type' => 'file','controller'=>'Images', 'action' =>'add'));
+	echo $this->Form->input('files.', array('type' => 'file', 'multiple','label' => 'Image à insérer : ', 'type' => 'file', 'size' => '100px'));
+	
+	//echo $this->Form->input('image_file', array('label' => 'Image à insérer : ', 'type' => 'file', 'size' => '100px'));
+	echo $this->Form->input('tags', array('label' => 'Tags (séparés par des virgules) : ', 'type' => 'text', 'size' => '100px','placeholder'=>'Liste des tags séparés par des virgules'));
 	echo $this->Form->end(__('Envoyer'),array('align' => 'center')); 
 ?>
 </p>
@@ -44,10 +49,18 @@ function checkAll(name, checked){
 
     foreach ($images as $image): 
     	$iCpt++;
+    	$tags = $image['Tag'];
     	echo "<td width='5%' align='center'>".$this->Form->checkbox('imageCheck', array('name' => 'fichiers[]','value' => $image['Image']['id']))."</td>";
 		echo "<td width='10%' align='center'>".$this->Html->image('data/'.$image['Image']['name'], array('height' =>'150px'))."</td>";
         echo "<td width='10%' align='center'>Publi&eacute;e par ".$image['User']['prenom']." ".$image['User']['nom']."<br /> le ".$image['Image']['created']."</td>";
+        echo "<td>";
+        foreach ($tags as $t) :
+        	echo "<span class='label label-tag'>".$t['name']." [";
+        	echo $this->Html->link("x",array('action'=>'deleteTag', $t['ImagesTag']['id']));
+        	echo "]</span";
+        endforeach;
         
+        echo "</td>";
         if($iCpt === 4) {
         	$iCpt = 0;
         	echo "<tr>";
