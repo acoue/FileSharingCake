@@ -251,12 +251,24 @@ ul {
 .label-tag {
   background-color: #5bc0de;
 }
-.label-tag[href]:hover,
+.label-tag a,
+.label-tag a:hover,
 .label-tag[href]:focus {
-  background-color: #31b0d5;
+  background-color: #5bc0de;
   text-decoration: none;
     color: #ffffff;
 } 
+
+.label-success {
+  background-color: #83c635;
+}
+.label-success a,
+.label-success a:hover,
+.label-success[href]:focus {
+  background-color: #83c635;
+  text-decoration: none;
+    color: #ffffff;
+}
 
 .lienPage {color: white; text-decoration: none;}
 .lienPage a:link {color: white; text-decoration: none;}

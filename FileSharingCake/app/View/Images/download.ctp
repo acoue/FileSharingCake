@@ -3,10 +3,11 @@ function afficheMessage() {
 
  document.getElementById('boiteInfo').style.position = 'absolute';
  document.getElementById('boiteInfo').style.display = 'block';
- document.location.replace('../images/doDownload');
+ document.location.replace('../images/doDownload/' + + document.getElementById('tag_id').value);
 }
 </script>
 <p><h3>T&eacute;l&eacute;chargement des images</h3></p>
+<p align='center'><?= $this->Form->input('tag_id', array('label' => 'Container : ','empty'=>'Tous')) ?></p>
 <?php
 if(empty($zipOb) || !$zipOb) {
 	echo "<p align='center'>Pour lancer la g&eacute;n&eacute;ration du zip contenant les photos cliquez sur le bouton</p>";

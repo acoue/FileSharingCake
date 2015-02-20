@@ -9,7 +9,7 @@ function checkAll(name, checked){
             inputs[i].checked = checked;
         }
     }
-}
+}	
 </script>
 <p>
 <table>
@@ -18,19 +18,26 @@ function checkAll(name, checked){
 		<td><span class='vertAlign'><h3>AJOUT D'UN FICHIER</h3></span></td>
 	</tr>
 </table>
-<? 	//http://grafikart.github.io/CakePHP-Media/
-	//echo $this->Form->create('Image', array('type' => 'file', 'multiple'=>'multiple','controller'=>'Images', 'action' =>'add'));
 
-	echo $this->Form->create('Image', array('type' => 'file','controller'=>'Images', 'action' =>'add'));
-	echo $this->Form->input('files.', array('type' => 'file', 'multiple','label' => 'Image à insérer : ', 'type' => 'file', 'size' => '100px'));
-	
-	//echo $this->Form->input('image_file', array('label' => 'Image à insérer : ', 'type' => 'file', 'size' => '100px'));
-	echo $this->Form->input('tags', array('label' => 'Tags (séparés par des virgules) : ', 'type' => 'text', 'size' => '100px','placeholder'=>'Liste des tags séparés par des virgules'));
-	echo $this->Form->end(__('Envoyer'),array('align' => 'center')); 
-?>
+<?= $this->Form->create('Image', array('type' => 'file','controller'=>'Images', 'action' =>'add'));?>
+<table width='80%'>
+	<tr>
+		<td width='10%'><label>Image à insérer :</label></td>
+		<td ailgn='left'><?= $this->Form->input('files.', array('type' => 'file', 'multiple','label' => false,'div' => false, 'type' => 'file', 'size' => '100px','required' =>'required')); ?></td>
+	</tr>
+	<tr>
+		<td><label>Container : </label></td>
+		<td ailgn='left'><?= $this->Form->input('tag_id',array('label' => false,'div' => false)); ?></td>
+	</tr>
+	<tr>
+		<td colspan='2' ><?= $this->Form->button('Ajouter'); ?></td>
+	</tr>
+</table>
+<?= $this->Form->end();?>
 </p>
 <hr />
 <p>
+<?php echo $this->Form->create('Image', array('controller'=>'Images', 'action' =>'delete')); ?>
 <table>
 	<tr>
 		<td><?= $this->Html->image('liste.png'); ?></td>
@@ -38,38 +45,41 @@ function checkAll(name, checked){
 	</tr>
 </table>
 </p>
+<p> Container : 
+<?php 
+echo "<span class='label label-success'>".$this->Html->link('Tous ',"/images/liste")." </span>";
+foreach ($listeTags as $t) echo "<span class='label label-tag'>".$this->Html->link($t['Tag']['name']." ","/images/liste/".$t['Tag']['id'])." </span>"; 
+?>
+
+</p>
 <p><input type="checkbox" onClick="checkAll('fichiers[]', this.checked);" /> Tout cocher/d&eacute;cocher</p>
+<!-- <p align='center'> -->
+<!-- <div id="results"></div> -->
+
 <p>Nombres de photos : <?= $total ?></p>
 <p align='center'>
 <table align='center' width='90%'>
-	<tr>
+  <tr>
 <?php 
-	echo $this->Form->create('Image', array('controller'=>'Images', 'action' =>'delete'));
-	$iCpt = 0;
+  echo $this->Form->create('Image', array('controller'=>'Images', 'action' =>'delete'));
+  $iCpt = 0;
 
     foreach ($images as $image): 
-    	$iCpt++;
-    	$tags = $image['Tag'];
-    	echo "<td width='5%' align='center'>".$this->Form->checkbox('imageCheck', array('name' => 'fichiers[]','value' => $image['Image']['id']))."</td>";
-		echo "<td width='10%' align='center'>".$this->Html->image('data/'.$image['Image']['name'], array('height' =>'150px'))."</td>";
-        echo "<td width='10%' align='center'>Publi&eacute;e par ".$image['User']['prenom']." ".$image['User']['nom']."<br /> le ".$image['Image']['created']."</td>";
-        echo "<td>";
-        foreach ($tags as $t) :
-        	echo "<span class='label label-tag'>".$t['name']." [";
-        	echo $this->Html->link("x",array('action'=>'deleteTag', $t['ImagesTag']['id']));
-        	echo "]</span";
-        endforeach;
-        
-        echo "</td>";
+      $iCpt++;
+      $tags = $image['Tag'];
+      echo "<td width='5%' align='center'>".$this->Form->checkbox('imageCheck', array('name' => 'fichiers[]','value' => $image['Image']['id']))."</td>";
+      echo "<td width='10%' align='center'>".$this->Html->image('data/'.$image['Image']['name'], array('height' =>'150px'))."</td>";
+        echo "<td width='10%' align='center'>Publi&eacute;e par ".$image['User']['prenom']." ".$image['User']['nom']."<br /> le ".$image['Image']['created'];
+        echo "<br /><span class='label label-tag'>".$image['Tag']['name']."</span></td>";
         if($iCpt === 4) {
-        	$iCpt = 0;
-        	echo "<tr>";
+          $iCpt = 0;
+          echo "<tr>";
         }
         
     endforeach;
     unset($image); 
 ?>
-	</tr>
+  </tr>
 </table>
 <?php 
 echo $this->Form->end("Supprimer");?>

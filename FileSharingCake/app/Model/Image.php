@@ -1,43 +1,42 @@
 <?php
-
 App::uses('AppModel', 'Model');
-
+/**
+ * Image Model
+ *
+ * @property User $User
+ * @property Tag $Tag
+ */
 class Image extends AppModel {
 
- 	public $belongsTo = array(
- 			'User' => array(
- 					'className' => 'Users',
- 					'foreign_key' => 'images_users_fk'
- 			)
- 	);
- 	
- 	public $hasMany = array('ImagesTag');
+/**
+ * Display field
+ *
+ * @var string
+ */
+	public $displayField = 'name';
 
- 	public $hasAndBelongsToMany = array('Tag');
- 	
- 	public function afterSave($created, $options = array()) {
- 		if ($created) {
- 			//Tag
-	 		//debug($this->data);
- 			//die();
- 			if(!empty($this->data['Image']['tags'])) {
- 				$tags = explode(',', $this->data['Image']['tags']);
- 				foreach ($tags as $tag):
- 				$tag = trim($tag);
- 				if(!empty($tag)) {
- 					$data = $this->Tag->findByName($tag);
- 					if(!empty($d)) {
- 						$this->Tag->id = $data['Tag']['id'];
- 					} else {
- 						$this->Tag->create();
- 						$this->Tag->save(array('name'=>$tag));
- 					}
- 			$this->loadModel('ImagesTag');
- 					$this->ImagesTag->create();
- 					$this->ImagesTag->save(array('image_id'=>$this->id,'tag_id'=>$this->Tag->id));
- 				}
- 				endforeach;
- 			}
- 		}
- 	}
+
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+/**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Tag' => array(
+			'className' => 'Tag',
+			'foreignKey' => 'tag_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		)
+	);
 }
