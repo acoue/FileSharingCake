@@ -1,5 +1,5 @@
 <!-- app/View/Users/add.ctp -->
-<h2>Modifier du mot de passe d'un utilisateur</h2>
+<h2>Modifier du mot de passe</h2>
 <?= $this->Form->create('User'); ?>
 <table width='40%' align='center'>
     <tr>
@@ -15,19 +15,21 @@
     </tr>
 </table>
 <p align='center'>
-<? 
-if(isset($this->request->data['User']['id'])) {
-	echo $this->html->link(
-		$this->Html->image('retour.png'),
-		array("controller" => "users", "action" => "edit/".$this->request->data['User']['id']),
-		array('escape' => false)
-		);
-} else {
-	echo $this->html->link(
-		$this->Html->image('retour.png'),
-		array("controller" => "users", "action" => "index"),
-		array('escape' => false)
-		);
+<?
+if (trim(rtrim($_SESSION['Auth']['User']['role'])) === 'admin') {
+	if(isset($this->request->data['User']['id'])) {
+		echo $this->html->link(
+			$this->Html->image('retour.png'),
+			array("controller" => "users", "action" => "edit/".$this->request->data['User']['id']),
+			array('escape' => false)
+			);
+	} else {
+		echo $this->html->link(
+			$this->Html->image('retour.png'),
+			array("controller" => "users", "action" => "index"),
+			array('escape' => false)
+			);
+	}
 }
 ?>
 </p>

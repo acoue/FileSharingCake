@@ -35,7 +35,7 @@ foreach ($users as $user) {
 	   	
 	   	
 	   	echo "</td>";
-	   	echo "<td align='center' width='70%'><b>".$user['User']['prenom']." ".$user['User']['nom']."</b></td>";
+	   	echo "<td align='center' width='70%'><b>".$user['User']['nom']." ".$user['User']['prenom']."</b></td>";
 	   	echo "<td align='center' width='10%'>";
 	   	echo $this->Html->link(
 					$this->Html->image('password.png'),
@@ -47,5 +47,10 @@ foreach ($users as $user) {
 	}
 ?>
 </table></br>
-
-<? if(!empty($this->Paginator->numbers())) echo "Page(s) : ".$this->Paginator->numbers(); ?>
+<?php
+	echo $this->Paginator->counter(array('format' => __('Page {:page} de {:pages}')));
+	echo "<br />";
+	echo $this->Paginator->prev('< ' . __('Prec.  '), array(), null, array('class' => 'prev disabled'));
+	echo $this->Paginator->numbers(array('separator' => ' '));
+	echo $this->Paginator->next(__('  Suiv.') . ' >', array(), null, array('class' => 'next disabled'));
+?>

@@ -10,7 +10,13 @@ function checkAll(name, checked){
         }
     }
 }	
+
+function afficheMessage() {
+	 document.getElementById('openModal').style.opacity = '1';
+	 return true;
+}
 </script>
+<div id="openModal" class="modalDialog"><div><?php echo $this->Html->image("patience.gif");?></div></div>
 <p>
 <table>
 	<tr>
@@ -18,8 +24,7 @@ function checkAll(name, checked){
 		<td><span class='vertAlign'><h3>AJOUT D'UN FICHIER</h3></span></td>
 	</tr>
 </table>
-
-<?= $this->Form->create('Image', array('type' => 'file','controller'=>'Images', 'action' =>'add'));?>
+<?= $this->Form->create('Image', array('type' => 'file','controller'=>'Images', 'action' =>'add', 'onsubmit'=>'return afficheMessage();'));?>
 <table width='80%'>
 	<tr>
 		<td width='10%'><label>Image à insérer :</label></td>
@@ -37,7 +42,6 @@ function checkAll(name, checked){
 </p>
 <hr />
 <p>
-<?php echo $this->Form->create('Image', array('controller'=>'Images', 'action' =>'delete')); ?>
 <table>
 	<tr>
 		<td><?= $this->Html->image('liste.png'); ?></td>
@@ -47,8 +51,17 @@ function checkAll(name, checked){
 </p>
 <p> Container : 
 <?php 
-echo "<span class='label label-success'>".$this->Html->link('Tous ',"/images/liste")." </span>";
-foreach ($listeTags as $t) echo "<span class='label label-tag'>".$this->Html->link($t['Tag']['name']." ","/images/liste/".$t['Tag']['id'])." </span>"; 
+
+if(!isset($tagSelected)) {
+	echo "<span class='label label-success'>".$this->Html->link('Tous ',"/images/liste")." </span>";
+	foreach ($listeTags as $t) echo "<span class='label label-tag'>".$this->Html->link($t['Tag']['name']." ","/images/liste/".$t['Tag']['id'])." </span>";
+} else {
+	echo "<span class='label label-tag'>".$this->Html->link('Tous ',"/images/liste")." </span>";
+	foreach ($listeTags as $t) {
+		if($tagSelected == $t['Tag']['id']) echo "<span class='label label-success'>".$this->Html->link($t['Tag']['name']." ","/images/liste/".$t['Tag']['id'])." </span>";
+		else echo "<span class='label label-tag'>".$this->Html->link($t['Tag']['name']." ","/images/liste/".$t['Tag']['id'])." </span>";
+	}
+}	 
 ?>
 
 </p>
@@ -58,22 +71,24 @@ foreach ($listeTags as $t) echo "<span class='label label-tag'>".$this->Html->li
 
 <p>Nombres de photos : <?= $total ?></p>
 <p align='center'>
-<table align='center' width='90%'>
+<table align='center' width='100%'>
   <tr>
 <?php 
-  echo $this->Form->create('Image', array('controller'=>'Images', 'action' =>'delete'));
+  echo $this->Form->create('Image', array('controller'=>'Images', 'action' =>'delete', 'onsubmit'=>'return afficheMessage();'));
   $iCpt = 0;
 
     foreach ($images as $image): 
       $iCpt++;
       $tags = $image['Tag'];
       echo "<td width='5%' align='center'>".$this->Form->checkbox('imageCheck', array('name' => 'fichiers[]','value' => $image['Image']['id']))."</td>";
-      echo "<td width='10%' align='center'>".$this->Html->image('data/'.$image['Image']['name'], array('height' =>'150px'))."</td>";
-        echo "<td width='10%' align='center'>Publi&eacute;e par ".$image['User']['prenom']." ".$image['User']['nom']."<br /> le ".$image['Image']['created'];
+      echo "<td width='10%' align='center'>".$this->Html->image('mini/'.$image['Image']['name'])."</td>";
+        echo "<td width='10%' align='left'>".$image['User']['prenom']." ".$image['User']['nom']."<br />";
+        //echo $image['Image']['name']."<br />";
+		echo "le ".date('d/m/Y H:i:s',strtotime($image['Image']['created']));
         echo "<br /><span class='label label-tag'>".$image['Tag']['name']."</span></td>";
-        if($iCpt === 4) {
+        if($iCpt === 3) {
           $iCpt = 0;
-          echo "<tr>";
+          echo "</tr><tr>";
         }
         
     endforeach;
@@ -83,6 +98,12 @@ foreach ($listeTags as $t) echo "<span class='label label-tag'>".$this->Html->li
 </table>
 <?php 
 echo $this->Form->end("Supprimer");?>
-<br />
-<? if(!empty($this->Paginator->numbers())) echo "Page(s) : ".$this->Paginator->numbers(); ?>
+<br /> 
+<?php
+	echo $this->Paginator->counter(array('format' => __('Page {:page} de {:pages}')));
+	echo "<br />";
+	echo $this->Paginator->prev('< ' . __('Prec.  '), array(), null, array('class' => 'prev disabled'));
+	echo $this->Paginator->numbers(array('separator' => ' '));
+	echo $this->Paginator->next(__('  Suiv.') . ' >', array(), null, array('class' => 'next disabled'));
+?>
 </p>

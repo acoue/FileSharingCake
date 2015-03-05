@@ -6,6 +6,10 @@
 class UsersController extends AppController {
 
 
+	public $paginate = array(
+        'limit' => 25,
+        'order' => array('nom' => 'asc','prenom' => 'asc')
+    );
 
     public function beforeFilter() {
     	parent::beforeFilter();
@@ -59,6 +63,7 @@ class UsersController extends AppController {
     }
 
     public function add() {
+    	//debug($this->request->data);die();
 		$this->set('title_for_layout', 'FileSharing - Ajout utilisateur');
         if ($this->request->is('post')) {
             $this->User->create();
@@ -79,7 +84,7 @@ class UsersController extends AppController {
         }
         if ($this->request->is('post') || $this->request->is('put')) {
             if ($this->User->save($this->request->data)) {
-                $this->Session->setFlash(__('L\'utilisateurer a été sauvegardé'), "message", array('type'=>'info'));
+                $this->Session->setFlash(__('L\'utilisateur a été sauvegardé'), "message", array('type'=>'info'));
                 return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('L\'utilisateur n\'a pas été sauvegardé. Merci de réessayer.'), "message", array('type'=>'erreur'));
@@ -121,7 +126,10 @@ class UsersController extends AppController {
 
 	            if ($this->User->saveField('password',$this->request->data['User']['new_password'])) {
 	                $this->Session->setFlash(__('Le mot de passe de l\'utilisateur a été sauvegardé'), "message", array('type'=>'info'));
-	                return $this->redirect(array('action' => 'index'));
+	                
+					if (trim(rtrim($_SESSION['Auth']['User']['role'])) === 'admin') {
+						return $this->redirect(array('action' => 'index'));
+					} else $this->redirect($this->Auth->redirectUrl());
 	            } else {
 	                $this->Session->setFlash(__('Le mot de passe de l\'utilisateur n\'a pas été sauvegardé. Merci de réessayer.'), "message", array('type'=>'erreur'));
 	            }

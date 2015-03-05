@@ -32,13 +32,14 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 	
-	var $components = array('DebugKit.Toolbar','Session', 'Auth' => array(
+	var $components = array('Session', 'Auth' => array(
 			'loginRedirect' => array('controller' => 'Images', 'action' => 'index'),
 			'logoutRedirect' => array('controller' => 'Images', 'action' => 'index'
 			)
 		)
 	);
 	
+	//'DebugKit.Toolbar',
 	
  	function beforeFilter(){
  		$this->Auth->authError = "Vous devez être connecté pour cette action";

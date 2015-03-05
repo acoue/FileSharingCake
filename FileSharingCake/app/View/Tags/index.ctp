@@ -1,3 +1,4 @@
+
 <div class="tags index">
 	<h2><?php echo 'Gestion des Container'; ?></h2>
 	<table width='80%' align='center'>
@@ -6,6 +7,7 @@
 			<th width='10%'><?php echo $this->Paginator->sort('id'); ?></th>
 			<th width='40%'><?php echo $this->Paginator->sort('name'); ?></th>
 			<th width='10%'><?php echo $this->Paginator->sort('online'); ?></th>
+			<th width='10%'>Nb Images</th>
 			<th class="actions"><?php echo __('Actions'); ?></th>
 	</tr>
 	</thead>
@@ -15,10 +17,11 @@
 		<td><?php echo h($tag['Tag']['id']); ?>&nbsp;</td>
 		<td><?php echo h($tag['Tag']['name']); ?>&nbsp;</td>
 		<td><?php if(h($tag['Tag']['online']) == '1') echo "Oui"; else echo "Non"; ?>&nbsp;</td>
+		<td><?php echo count($tag['Image'])?></td>
 		<td class="actions">
 			<?php echo $this->Html->link($this->Html->image('view.png'), array('action' => 'view', $tag['Tag']['id']),array('escape' => false)); ?>
 			<?php echo $this->Html->link($this->Html->image('modifier.png'), array('action' => 'edit', $tag['Tag']['id']),array('escape' => false)); ?>
-			<?php echo $this->Form->postLink($this->Html->image('supprimer.png'), array('action' => 'delete', $tag['Tag']['id']), array('escape' => false), 'Etes-vous sûr de vouloir supprimer %s?', $tag['Tag']['id']); ?>
+			<?php if(count($tag['Image']) == 0) echo $this->Form->postLink($this->Html->image('supprimer.png'), array('action' => 'delete', $tag['Tag']['id']), array('escape' => false), __('Etes-vous sûr de vouloir supprimer le tag n° %s ?', $tag['Tag']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

@@ -21,7 +21,7 @@ class TagsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Tag->recursive = 0;
+		$this->Tag->recursive = 1;
 		$this->set('tags', $this->Paginator->paginate());
 	}
 
@@ -49,10 +49,10 @@ class TagsController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Tag->create();
 			if ($this->Tag->save($this->request->data)) {
-				$this->Session->setFlash(__('The tag has been saved.'));
+				$this->Session->setFlash('Le container a été sauvegardé.', "message", array('type'=>'info'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
+				$this->Session->setFlash('Erreur dans la sauvegarde du container', "message", array('type'=>'erreur'));
 			}
 		}
 	}
@@ -70,10 +70,10 @@ class TagsController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Tag->save($this->request->data)) {
-				$this->Session->setFlash(__('The tag has been saved.'));
+				$this->Session->setFlash('Le container a été sauvegardé.', "message", array('type'=>'info'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The tag could not be saved. Please, try again.'));
+				$this->Session->setFlash('Erreur dans la sauvegarde du container', "message", array('type'=>'erreur'));
 			}
 		} else {
 			$options = array('conditions' => array('Tag.' . $this->Tag->primaryKey => $id));
@@ -95,9 +95,9 @@ class TagsController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Tag->delete()) {
-			$this->Session->setFlash(__('The tag has been deleted.'));
+			$this->Session->setFlash('Le container a été supprimé.', "message", array('type'=>'info'));
 		} else {
-			$this->Session->setFlash(__('The tag could not be deleted. Please, try again.'));
+			$this->Session->setFlash('Erreur dans la suppression du container', "message", array('type'=>'erreur'));
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

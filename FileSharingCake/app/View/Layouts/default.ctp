@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
     	<meta charset="ISO-8859-1" />
-    	<?= $this->Html->css(array('style','menu')); ?>
+    	<?= $this->Html->css(array('style','menu','popup')); ?>
     	<?= $this->fetch('css'); ?>
         <title><?php if(isset($title_for_layout)) echo "FileSharing"; else echo $title_for_layout; ?></title>
     </head>
@@ -26,7 +26,7 @@
 					 <table class="tableFooter" width='90%' >
 						 <tr class="administration">
 							 <td width='50%' align="left">&copy; Anthony COUE (anthony.coue(at)gmail.com)</td>
-							 <td width='50%' align="right">version 4.0 du 20/02/2015</td>
+							 <td width='50%' align="right">version 4.2 du 04/03/2015</td>
 						 </tr>
 					 </table>
 				 </div> 
@@ -34,6 +34,6 @@
 		</div>  
 		<?= $this->Html->script(array('jquery','jquery-ui')); ?>
     	<?= $this->fetch('script'); ?>
-		<?= $this->element('sql_dump'); ?>
+		<?php //echo $this->element('sql_dump'); ?>
 	</body>
 </html>		

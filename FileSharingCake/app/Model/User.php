@@ -17,28 +17,5 @@ class User extends AppModel {
 		return true;
 	}
 	
-	public $validate = array(
-			'username' => array(
-				array(
-					'required'   => true,
-					'allowEmpty' => false,
-					'message'    => 'Un nom d\'utilisateur est requis'
-				)
-			),
-			'password' => array(
-				array(
-					'required'   => true,
-					'allowEmpty' => false,
-					'message'    => 'Un nom d\'utilisateur est requis'
-				)
-			),
-			'role' => array(
-					'valid' => array(
-							'rule' => array('inList', array('admin', 'user')),
-							'message' => 'Merci de rentrer un rôle valide',
-							'allowEmpty' => false
-					)
-			)
-	);
-	}
+}
 	
